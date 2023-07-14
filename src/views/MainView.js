@@ -18,7 +18,7 @@ export default function MainView () {
         <article style={{height:'55vh',display:'flex',flexDirection:'column',justifyContent:'space-evenly',
             borderRadius:'10px', backgroundColor: 'rgb(22 35 62)',paddingTop:'2em'}}>
             <p>A STORY_PRYZM, is a story of many viewz.</p>
-            <code>Unlock a PRYZM of immersive and collectible STORY!</code><br/>
+            <code>Unlock a PRYZM of immersive, collectible STORY!</code><br/>
             <pre><i>u wanna try?</i></pre>
             <hr style={{width:'88%',height:'6px',boxShadow:'-3px 15px 7px 0px #180018',
                 border:'1px solid skyblue',borderRadius:'100%',margin:'1em auto',

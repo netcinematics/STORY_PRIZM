@@ -28,7 +28,7 @@ function getTokenzINDEX(){ //SHOW MAIN CARDS.
     })    
 }
 
-let TXTzView =  ( {token} ) => { 
+let TXTViewz =  ( {token} ) => { 
     let exampleDetail = {key:'a13',txt:"add details",title:'a13',ctx:{}}
     let [localDetails,setLocalDetails] = useState([]) //TODO REMOVE
 
@@ -60,6 +60,7 @@ let TXTzView =  ( {token} ) => {
         if(token.title.indexOf('~')>-1){
             lookupTitle = token.title.replaceAll('~','')
         }
+        debugger;
         const options = {
             method: 'GET',
             url : `https://raw.githubusercontent.com/netcinematics/aPRYZMaGAMEa/main/src/meta_net/CARDZ/${lookupTitle}.json`
@@ -122,10 +123,9 @@ let TXTzView =  ( {token} ) => {
         //load page view with new selected token
     }
     function dynamicDetailDisplay(){
-        return(<>
-
-        <h1 style={{cursor:"pointer"}} 
-        onClick={ ()=>dynamicLink(token)}>
+    return(
+        <>
+        <h1 style={{cursor:"pointer"}} onClick={ ()=>dynamicLink(token)}>
         {(token && token.title)?token.title:'aWORDZa'}</h1>
         {(token && token.state && token.state.txtz && token.state.txtz.length)?
             token.state.txtz[0] : 'unlocked' }
@@ -135,35 +135,32 @@ let TXTzView =  ( {token} ) => {
         {(token && token.txtz)?
             token.txtz.map( (item, idx)=> { //short description txt
                 return (item && item.title && item.title==="short")?item.txtz[0]:'';
-            })
-            :'no short description'
+            }):'no short description'
         }
         <br></br>
         {(token && token.txtz)?
             token.txtz.map( (item, idx)=> { //long description txt
                 return (item.title==="long")?item.txtz[0]:'';
-            })
-            :'no long description'
+            }):'no long description'
         }
-
-        </>)
+    </>)
     }
 
     return(
     <>
-        { dynamicDetailDisplay() }
+        {dynamicDetailDisplay()}
         <hr></hr>
-        <button style={{marginTop:'1em'}} onClick={ ()=>{ addLocalDetails()   }  } >add details</button>
-        <button style={{marginTop:'1em'}} onClick={ ()=>{ addUnlockTXTz()   }  } >unlock text</button>
-        { localDetails.map( (item,idx)=>{ return <div>{item.txt}</div>   } )}
-        { <article style={{background:'skyblue',marginTop:'2em',borderRadius:'22px',fontSize:'22px',padding:'1em',
+        <button style={{marginTop:'1em'}} onClick={()=>{ addLocalDetails()}}>add details</button>
+        <button style={{marginTop:'1em'}} onClick={()=>{ addUnlockTXTz()}}>unlock text</button>
+        {localDetails.map((item,idx)=>{ return <div>{item.txt}</div>})}
+        {<article style={{background:'skyblue',marginTop:'2em',borderRadius:'22px',fontSize:'22px',padding:'1em',
             }}>
                 
-        {(tokenTXT_ARRAY && tokenTXT_ARRAY.length)?
+        {/* {(tokenTXT_ARRAY && tokenTXT_ARRAY.length)?
             tokenTXT_ARRAY.map( (item, token_idx)=> { //txt_tokenz
                 return (
                     <>
-                        <section>{item.title}</section>
+                        <section >{item.title}</section>
                         {(item.txtz && item.txtz.length)?
                             item.txtz.map( (txt, txt_idx)=> { //txt_tokenz
                                 return (
@@ -178,7 +175,7 @@ let TXTzView =  ( {token} ) => {
                 )
             })
             :'no tokenz'
-        }
+        } */}
         COUNT: {tokenTXT_INDEX} of {tokenTXT_COUNT}
         </article> }
     </>
@@ -201,7 +198,6 @@ function setCardViewContent(direction){
         if(colm && colm.length && offsetVert >= colm[offsetRight].length){ offsetRight = 1; } //reset default
         tgt = offsetRight+'.'+offsetVert;
         let nextToken = lookUpNUMZToken(tgt);
-        // let newToken = {numz:tgt, id:111, txt:'hi',title:'yooooo!'}
         if(nextToken) { setSelectedTokenObj(nextToken); } //load tgt view.
     }
 }
@@ -222,7 +218,7 @@ let TokenCardz = ( {token} ) => {
         <article className="scrollBarV" style={{flex:1, color:'steelblue',
             boxShadow:'inset 0px 0px 10px 0px blue'}}>
             <hr></hr>
-            <TXTzView token={selectedToken}/>
+            <TXTViewz token={selectedToken} key={'txt.'+token.numz}/>
         </article>
         <footer style={{width:'100%',display:'flex',justifyContent:'space-between',
             padding:'0.666em'}}>
@@ -247,21 +243,14 @@ function TokenGrid (){
     for(let i=0; i < tokenz_INDEX_DATA.length; i += COLNUM){
         colm = tokenz_INDEX_DATA.slice(i, i+COLNUM);
         ++humanIDX;
-        // let setHumanIDX = function(token,idx){ //required scope closure by LINTER warning.
-        //     token.numz = humanIDX.toString()+'.'+idx;       //apply dynamic_numz
-        //     return <TokenFrame token={token} setTokenViewfn={setTokenViewfn}/>
-        // }
          tokenCOLUMNS.push( 
          <div  key={'col_'+i} style={{display:'flex',flexDirection:'column',flex:'1 1 0'}}>
             <header style={{minHeight:'2em'}}></header>
             <header>{humanIDX}</header>
-
             { 
-            // colm.map(setHumanIDX) //LINT: cannot use arrow fn here.
-            colm.map( (token,idx)=>{ 
-                // token.numz = humanIDX.toString()+'.'+idx;       //apply dynamic_numz
-                // return <TokenCardFrame key={'tokencard_'+idx} token={token} idx={idx}/>
-                return <TokenCard token={token} idx={idx} setTokenViewfn={setTokenViewfn}/>
+            colm.map( (token,idx) => { 
+                token.numz = humanIDX.toString()+'.'+idx.toString();       //apply dynamic_numz
+                return <TokenCard token={token} idx={idx} setTokenViewfn={setTokenViewfn} key={'tokencard'+token.numz}/>
             }) 
             }
             <footer style={{minHeight:'3em'}}></footer>
@@ -270,10 +259,6 @@ function TokenGrid (){
     }    
     return(tokenCOLUMNS)
 }
-
-// function TokenCardFrame({ token }) { //todo refactor
-//     return ( <TokenFrame token={token} setTokenViewfn={setTokenViewfn}/> );
-// }
 
 function lookUpNUMZToken(tgt){
     debugger;
